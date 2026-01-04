@@ -1,23 +1,618 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Home</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <!--
-      Need a visual blank slate?
-      Remove all code in `styles.css`!
-    -->
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="script.js"></script>
-  </head>
-  <body>
+
+    <style>
+        /* 기본 스타일 초기화 */
+        body {
+            font-family: "Noto Sans KR", sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            background-color: #f7f9fc; /* 부드러운 배경색 */
+            color: #333;
+            word-break: keep-all;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: #1a4d7d; /* 딥 블루 계열 */
+            color: white;
+            padding: 3rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 0.5rem 0 1rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        header p {
+            font-size: 1.2rem;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        /* 네비게이션 스타일 */
+        nav {
+            background-color: #2e6ea9; /* 헤더보다 살짝 밝은 블루 */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        nav li {
+            padding: 1rem 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: color 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+        nav a:hover {
+            color: #ffc107; /* 밝은 노란색 강조 */
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* 메인 콘텐츠 스타일 */
+        main {
+            max-width: 1100px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+        }
+
+        /* 섹션 제목 스타일 */
+        section {
+            padding: 2rem 0;
+        }
+        h2 {
+            font-size: 2.2rem;
+            color: #1a4d7d;
+            font-weight: 700;
+            margin-top: 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #e0efff;
+        }
+        h3 {
+            font-size: 1.6rem;
+            color: #3c7fb5;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid #3c7fb5;
+            padding-left: 1rem;
+            font-weight: 600;
+        }
+
+        /* 일반 텍스트 스타일 */
+        p {
+            font-size: 1rem;
+            text-align: justify;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 테이블 스타일 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+        th, td {
+            padding: 1.2rem;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f8ff; /* 연한 하늘색 배경 */
+            color: #1a4d7d;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #fcfcfc;
+        }
+        td strong {
+            color: #1a4d7d;
+        }
+
+        /* 키워드 태그 스타일 */
+        .keyword-tags {
+            margin: 2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 1rem;
+            background-color: #f5fafd;
+            border-radius: 10px;
+        }
+        .keyword-tags a {
+            background-color: #e0f0ff;
+            color: #0066cc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .keyword-tags a:hover {
+            background-color: #b3d1ff;
+            transform: scale(1.03);
+        }
+
+        /* FAQ 아코디언 스타일 */
+        dl dt {
+            font-weight: 700;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            color: #0066cc;
+            background-color: #f5fafd;
+            padding: 1.2rem;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+        dl dt::after {
+            content: "+";
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #0066cc;
+            transition: transform 0.3s ease;
+        }
+        dl dt.active::after {
+            content: "-";
+            transform: translateY(-50%) rotate(0deg);
+        }
+        dl dd {
+            margin: 0.5rem 0 1.5rem 0;
+            padding: 1rem 1.5rem;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            display: none;
+        }
+        dl dt.active + dd {
+            display: block;
+        }
+
+        /* CTA 버튼 스타일 */
+        .cta-button {
+            display: block;
+            background-color: #ff6600; /* 오렌지색 강조 */
+            color: white;
+            font-weight: 700;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            margin: 2rem auto;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            text-align: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            max-width: 350px;
+        }
+        .cta-button:hover {
+            background-color: #e65c00;
+            transform: translateY(-2px);
+        }
+
+        /* 외부 링크 스타일 */
+        .external-link {
+            display: block;
+            color: #0066cc;
+            font-weight: 500;
+            margin-top: 1rem;
+            text-decoration: underline;
+            font-size: 0.95rem;
+        }
+
+        /* 폼 스타일 */
+        .quote-form {
+            background-color: #f0f8ff;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        .quote-form label {
+            display: block;
+            font-weight: 600;
+            margin-top: 1rem;
+            color: #1a4d7d;
+        }
+        .quote-form input[type="text"],
+        .quote-form input[type="tel"],
+        .quote-form input[type="date"],
+        .quote-form select {
+            width: calc(100% - 2rem);
+            padding: 1rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 1rem;
+        }
+        .form-group {
+            flex: 1;
+        }
+        .quote-form button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+        .quote-form button:hover {
+            background-color: #004d99;
+        }
+
+        /* 풋터 스타일 */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            font-size: 0.9rem;
+            color: #777;
+            background-color: #e0eaf1;
+            margin-top: 3rem;
+            border-top: 1px solid #d0dbe4;
+        }
+        footer .info-text {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* 미디어 쿼리 (모바일 대응) */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            main {
+                margin: 1.5rem auto;
+                padding: 0 1rem;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 0;
+            }
+            nav li {
+                width: 100%;
+                text-align: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            nav a {
+                display: block;
+                padding: 0.8rem 1rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            h3 {
+                font-size: 1.4rem;
+                padding-left: 0.8rem;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            .quote-form input[type="text"],
+            .quote-form input[type="tel"],
+            .quote-form input[type="date"],
+            .quote-form select {
+                width: calc(100% - 1.5rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>창원이사짐센터 | 믿음직한 포장이사 견적 비교, 잘하는 곳 추천</h1>
+        <p>창원, 마산, 진해 전 지역을 아우르는 1등 이사 서비스 플랫폼입니다.</p>
+    </header>
+
     <nav>
-      <a href="/" aria-current="page">Home</a>
-      <a href="/page2.html">Other page</a>
+        <ul>
+            <li><a href="#intro">센터 소개</a></li>
+            <li><a href="#service-list">이사 서비스</a></li>
+            <li><a href="#pricing">비용 안내</a></li>
+            <li><a href="#process">이사 절차</a></li>
+            <li><a href="#review">고객 후기</a></li>
+            <li><a href="#faq">자주 묻는 질문</a></li>
+        </ul>
     </nav>
+
     <main>
-      <h1>Home page</h1>
+        <section id="intro">
+            <h2>창원 이사짐센터, 왜 선택해야 할까요?</h2>
+            <p><strong>창원이사짐센터</strong>는 경상남도 창원시를 비롯해 마산, 진해 등 통합 창원 전 지역의 이사 전문가들로 구성된 전문 이사 서비스 플랫폼입니다. 복잡하고 까다로운 이사 과정을 고객님이 편안하게 경험하실 수 있도록, 저희는 단순한 짐 운반을 넘어 고객 맞춤형 솔루션을 제공합니다. 창원 지역의 지리적 특성과 아파트, 주택 등 다양한 주거 환경에 대한 깊이 있는 이해를 바탕으로, 고객님의 소중한 이삿짐을 가장 안전하고 신속하게 옮겨드립니다.</p>
+            <p>저희는 **투명한 견적 시스템**을 통해 합리적인 이사 비용을 제시합니다. 온라인으로 간편하게 견적을 비교하고, 전문 매니저의 **무료 방문 견적**을 통해 정확한 이사 비용을 확인하실 수 있습니다. 특히 이사 당일 추가 비용 발생을 최소화하기 위해 계약서에 모든 사항을 명확하게 기재하는 것을 원칙으로 합니다. 창원에서 **이사 잘하는 곳**을 찾고 계시다면, 지금 바로 저희 창원이사짐센터와 상담하세요.</p>
+
+            <h3>창원 지역 특화 이사 서비스의 강점</h3>
+            <p>창원시는 일반 주택가부터 신도시 대단위 아파트 단지까지 다양한 주거 형태가 공존합니다. 특히 마산, 진해 지역은 구도심과 신도심이 복합되어 있어 이사 환경이 제각각입니다. 저희 창원이사짐센터는 이러한 지역적 특성을 고려하여 맞춤형 이사 솔루션을 제공합니다. 예를 들어, 좁은 골목길이 많은 구도심 지역 이사 시에는 숙련된 운반팀이 투입되며, 고층 아파트 단지 이사 시에는 사다리차 배치 및 엘리베이터 사용에 대한 사전 협의를 철저히 진행합니다. **창원 포장이사**를 포함한 모든 서비스는 고객님의 환경에 최적화된 방식으로 진행됩니다.</p>
+            <p>또한, 창원시의 **손없는날** 이사 수요가 높은 날짜에 대비하여 충분한 인력과 장비를 확보하고 있습니다. **창원 이사 비용**은 이사 날짜, 거주 형태, 짐의 양에 따라 크게 달라지므로, 저희는 고객님께 가장 유리한 조건으로 이사를 진행할 수 있도록 전문적인 컨설팅을 제공해 드립니다. <a href="#pricing">창원 이사 비용</a>에 대한 자세한 정보는 아래에서 확인하실 수 있습니다.</p>
+
+            <div class="keyword-tags" aria-label="창원 이사 관련 키워드">
+                <a href="#intro">창원이사짐센터</a>
+                <a href="#pricing">창원 포장이사 비용</a>
+                <a href="#service-list">마산 포장이사</a>
+                <a href="#service-list">진해 이사짐센터</a>
+                <a href="#pricing">창원 이사 견적</a>
+                <a href="#service-list">창원 원룸이사</a>
+                <a href="#service-list">창원 반포장이사</a>
+                <a href="#faq">이사 업체 추천 창원</a>
+                <a href="#intro">창원 아파트 이사</a>
+                <a href="#intro">손없는날 이사 비용</a>
+                <a href="#service-list">의창구 포장이사</a>
+                <a href="#service-list">성산구 이사</a>
+                <a href="#service-list">마산합포구 이사</a>
+                <a href="#service-list">마산회원구 이사</a>
+                <a href="#service-list">진해구 이사</a>
+                <a href="#process">이사 체크리스트</a>
+                <a href="#pricing">창원 이삿짐센터 가격</a>
+                <a href="#pricing">포장이사 잘하는 곳</a>
+            </div>
+        </section>
+
+        <section id="service-list">
+            <h2>창원 이사 서비스 종류 및 비교</h2>
+            <p>창원이사짐센터는 고객님의 라이프스타일과 예산에 맞춰 다양한 이사 서비스를 제공합니다. **포장이사**를 비롯하여, **반포장이사**, **일반이사**, **사무실이사** 등 고객님의 필요에 맞는 최적의 서비스를 선택하실 수 있습니다. 각 서비스의 특징을 비교하여 현명한 이사를 준비하세요.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>서비스 종류</th>
+                        <th>포장</th>
+                        <th>운송 및 운반</th>
+                        <th>도착지 정리 및 배치</th>
+                        <th>이사 비용</th>
+                        <th>추천 대상</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>포장이사</strong></td>
+                        <td>업체 담당 (모든 짐)</td>
+                        <td>업체 담당</td>
+                        <td>업체 담당 (정리 및 배치)</td>
+                        <td>높음</td>
+                        <td>시간적 여유가 없는 분, 편리한 이사를 원하는 분</td>
+                    </tr>
+                    <tr>
+                        <td><strong>반포장이사</strong></td>
+                        <td>업체 담당 (큰 짐 위주)</td>
+                        <td>업체 담당</td>
+                        <td>고객과 업체 분담 (잔짐은 고객 정리)</td>
+                        <td>중간</td>
+                        <td>이사 비용을 절약하고 싶은 분, 잔짐 정리를 직접 할 수 있는 분</td>
+                    </tr>
+                    <tr>
+                        <td><strong>일반이사</strong></td>
+                        <td>고객 담당</td>
+                        <td>업체 담당</td>
+                        <td>고객 담당</td>
+                        <td>낮음</td>
+                        <td>짐이 적은 원룸 이사나 짐 정리에 자신 있는 분</td>
+                    </tr>
+                    <tr>
+                        <td><strong>사무실이사</strong></td>
+                        <td>업체 담당 (특수 포장)</td>
+                        <td>업체 담당</td>
+                        <td>업체 담당 (사무 기기 배치 포함)</td>
+                        <td>별도 협의</td>
+                        <td>기업, 사무실 이전 시 전문적인 운송이 필요한 경우</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>특히 **창원 포장이사** 서비스는 짐 포장에서부터 운반, 도착지에서의 정리와 청소까지 모든 과정을 전문 인력이 담당합니다. 고객님은 이사 당일, 이삿짐이 새 보금자리에 정리되는 모습을 확인만 하시면 됩니다. 바쁜 일상 속에서 이사에 신경 쓸 틈이 없는 분들께 가장 적합한 서비스입니다.</p>
+
+            <h3>창원 원룸/소형 이사 및 특수 이사</h3>
+            <p>**창원 원룸이사** 또는 1인 가구 이사는 일반 이사와는 다른 접근 방식이 필요합니다. 짐의 양이 적고 이사 동선이 단순한 경우가 많아, 불필요한 비용을 줄이고 신속하게 진행하는 것이 중요합니다. 저희 창원이사짐센터는 소량 짐 운반에 최적화된 소형 차량과 숙련된 인력을 배정하여 효율적인 이사를 진행합니다. 또한, 피아노, 에어컨, 벽걸이 TV 등 특수 물품이나 고가 가전제품 운송이 필요한 경우에도 전담팀을 구성하여 안전하게 운반합니다. **마산 이사**, **진해 이사** 등 창원 내 모든 지역에서 소형 이사 견적 문의가 가능합니다.</p>
+
+            <h3>창원시 구별 이사 환경 분석 및 서비스 제공 지역 (30+ 키워드)</h3>
+            <p>창원시는 크게 의창구, 성산구, 마산합포구, 마산회원구, 진해구로 나뉘며 각 지역마다 주거 형태와 이사 환경이 상이합니다. 저희 창원이사짐센터는 창원 전 지역의 이사 환경을 면밀히 분석하고 있습니다. 예를 들어, **의창구 포장이사**는 창원역 인근 주택가와 명서동, 팔용동 등의 주거 밀집 지역 특성을 고려하며, **성산구 이사**는 창원시청 주변의 신축 아파트 단지와 상남동 오피스텔 밀집 지역의 이사 노하우를 적용합니다. **마산 이사**의 경우, **마산합포구 이사**는 마산 구도심과 바닷가 인근의 이사 환경을, **마산회원구 이사**는 내서읍, 양덕동 지역의 이사를 전문적으로 처리합니다. **진해구 이사**는 진해 신도시 및 구도심의 이사 환경을 정확히 파악하여 맞춤 견적을 제공합니다. 아래는 저희가 서비스를 제공하는 창원시의 주요 동/지역입니다:</p>
+            <ul>
+                <li><strong>의창구:</strong> 명서동, 팔용동, 봉림동, 북면, 대산면, 동읍, 용호동, 사림동, 소계동</li>
+                <li><strong>성산구:</strong> 상남동, 중앙동, 반림동, 가음정동, 사파동, 대방동, 성주동, 남양동</li>
+                <li><strong>마산합포구:</strong> 산호동, 오동동, 월영동, 해운동, 진동면, 구산면, 현동</li>
+                <li><strong>마산회원구:</strong> 양덕동, 합성동, 내서읍, 회원동, 석전동, 봉암동, 구암동</li>
+                <li><strong>진해구:</strong> 용원동, 풍호동, 이동, 덕산동, 석동, 장천동, 자은동, 웅동</li>
+            </ul>
+        </section>
+
+        <section id="pricing">
+            <h2>창원 이사 비용 산출 기준 및 절약 팁 (2026년 기준)</h2>
+            <p><strong>창원 포장이사 비용</strong>은 단순히 평수만으로 결정되지 않습니다. **이삿짐센터 가격**은 이사 날짜, 짐의 양, 작업 인원, 이동 거리, 특수 작업 여부 등 여러 요소가 복합적으로 작용합니다. 저희 창원이사짐센터는 투명한 견적을 위해 고객님의 환경을 꼼꼼히 분석하여 맞춤형 비용을 산출합니다.</p>
+
+            <h3>1. 이사 비용에 영향을 미치는 주요 요인</h3>
+            <p>정확한 **창원 이사 비용**을 파악하기 위해 다음 요소들을 미리 확인하시면 좋습니다. 2026년 현재 기준으로 이사 비용을 산출하는 주요 기준은 다음과 같습니다:</p>
+            <ul>
+                <li><strong>이사 종류 및 짐의 양:</strong> 포장이사, 반포장이사, 일반이사에 따라 서비스 범위와 인건비가 달라집니다. 짐의 양은 평수나 부피에 따라 책정되며, 짐이 많을수록 인력과 차량 크기가 증가하여 비용이 상승합니다.</li>
+                <li><strong>이사 날짜 (손없는날):</strong> 이사 수요가 집중되는 **손없는날**은 이사 비용이 평소보다 10~20%가량 높게 책정될 수 있습니다. 2026년 **손없는날**은 이사 성수기와 겹치는지 확인하여 이사 일정을 잡는 것이 비용 절감에 도움이 됩니다. (예: 2026년 3월, 4월, 9월, 10월 등 성수기 기간)</li>
+                <li><strong>이동 거리 및 작업 환경:</strong> 출발지와 도착지 간의 거리가 멀수록 운송비가 증가합니다. 또한, 엘리베이터 유무, 사다리차 사용 여부(층수), 좁은 골목길 여부 등 작업 환경에 따라 추가 비용이 발생할 수 있습니다.</li>
+                <li><strong>작업 인원 및 차량 크기:</strong> 짐의 양에 따라 적절한 인원(남자 2명, 여자 1명 등)과 차량(1톤, 2.5톤, 5톤 등)이 결정되며, 인원 추가나 차량 증차 시 비용이 증가합니다.</li>
+            </ul>
+
+            <h3 style="text-align: center; color: #1a4d7d;">2026년 창원 포장이사 예상 비용 변화 그래프 (가상 데이터)</h3>
+            <img src="https://via.placeholder.com/800x400?text=2026%EB%85%84+%EC%B0%BD%EC%9B%90+%ED%8F%AC%EC%9E%A5%EC%9D%B4%EC%82%AC+%EB%B9%84%EC%9A%A9+%EC%98%88%EC%83%81+%EB%B3%80%ED%99%94+%EA%B7%B8%EB%9E%98%ED%94%84" alt="창원 포장이사 비용 변화 그래프" style="width: 100%; height: auto; margin: 2rem 0; border: 1px solid #e0e0e0; border-radius: 8px;">
+            <p style="text-align: center; font-style: italic; color: #555;">(위 그래프는 창원 지역 이사 성수기 및 비수기에 따른 평균 이사 비용 변화를 가상으로 표현한 자료입니다. 정확한 견적은 방문 견적을 통해 확인하세요.)</p>
+
+            <h3>2. 창원 이사 비용 절약을 위한 팁</h3>
+            <p><strong>첫째, 방문 견적은 필수입니다.</strong> 전화나 온라인 견적은 대략적인 비용일 뿐입니다. 정확한 짐의 양과 특수 물품, 이사 환경을 확인하지 않고 계약할 경우, 이사 당일 추가 비용이 발생할 위험이 높습니다. 반드시 **무료 방문 견적**을 통해 정확한 견적서를 받으세요. 저희 창원이사짐센터는 고객님의 요청 시 언제든지 전문 매니저가 방문하여 견적을 내드립니다.</p>
+            <p><strong>둘째, 이사 시기를 현명하게 선택하세요.</strong> **손없는날**을 고집하지 않는다면 평일이나 비수기를 이용하는 것이 좋습니다. 이사 날짜가 유연하다면, 2~3곳의 **창원 이사 업체**에 견적을 문의하고 여러 날짜의 비용을 비교해 보세요. 이사 비수기인 12월부터 2월 사이에는 비용 절감의 폭이 클 수 있습니다. <a href="https://namu.wiki/w/%EC%86%90%EC%97%86%EB%8A%94%EB%82%A0" target="_blank" rel="noopener noreferrer" class="external-link">손없는날에 대한 정보 (나무위키)</a></p>
+            <p><strong>셋째, 불필요한 짐을 정리하세요.</strong> 이사 비용은 짐의 양에 비례합니다. 이사 전에 사용하지 않는 물건이나 버릴 짐들을 미리 정리하면, 짐을 포장하는 시간과 비용을 동시에 줄일 수 있습니다. 중고 물품 판매나 폐가전 무상 수거 서비스를 활용하는 것도 좋은 방법입니다.</p>
+        </section>
+
+        <section id="process">
+            <h2>창원이사짐센터 포장이사 진행 절차</h2>
+            <p>성공적인 이사는 체계적인 계획에서 시작됩니다. 저희 창원이사짐센터는 고객님께 투명하고 신뢰성 있는 이사 서비스를 제공하기 위해 다음 4단계 절차를 준수합니다.</p>
+
+            <h3>1. 견적 상담 및 방문 견적 (무료)</h3>
+            <p>고객님께서 이사 일정을 결정하면, 전화 또는 온라인으로 **창원 포장이사 견적**을 신청해 주십니다. 1차 상담을 통해 대략적인 정보를 파악한 후, 전문 견적 매니저가 고객님의 집을 직접 방문합니다. 방문 견적 시에는 이삿짐의 종류와 양, 주거 환경(아파트 층수, 엘리베이터 유무, 사다리차 사용 가능성), 특수 물품(피아노, 에어컨 등)을 꼼꼼히 확인합니다. 이 과정에서 **창원 이사 비용**을 확정하고, 계약서에 명시될 서비스 범위와 피해보상 규정을 상세하게 안내해 드립니다.</p>
+
+            <h3>2. 계약 및 이사 준비</h3>
+            <p>방문 견적을 바탕으로 계약을 체결합니다. 계약 시에는 반드시 <strong>이사화물 표준약관</strong>을 기반으로 한 계약서를 작성하며, 작업 인원, 차량 대수, 추가 요금 발생 조건 등을 명확히 합니다. 고객님은 계약서 내용을 꼼꼼히 확인하고, 계약 후에는 귀중품(현금, 유가증권 등)을 별도로 보관하며, 냉장고 음식물 정리 등 이사 전 필요한 준비를 진행합니다. 이사 당일 혼란을 막기 위해 저희가 제공하는 **이사 체크리스트**를 활용하여 준비하시면 편리합니다.</p>
+
+            <h3>3. 이사 당일 포장 및 운송</h3>
+            <p>이사 당일, 숙련된 **창원 이사짐센터** 전문 팀이 방문합니다. 팀장은 고객님과 함께 이사 범위 및 유의사항을 최종 점검합니다. 짐 포장은 짐의 종류에 맞는 전용 포장재(에어캡, 포장 커버, 이중 박스 등)를 사용하여 안전하게 진행됩니다. 특히 깨지기 쉬운 식기류나 고가 가전은 파손 위험을 최소화하도록 개별 포장합니다. 포장된 짐은 이사 차량에 안전하게 적재되며, 출발지 청소 및 최종 점검을 완료합니다. 도착지에서는 고객님이 원하는 위치에 가구와 가전제품을 배치하고, 짐 정리 및 마무리 청소를 진행합니다.</p>
+
+            <h3>4. 마무리 및 사후 관리 (피해보상 규정)</h3>
+            <p>이사 팀장은 짐 정리가 완료된 후 고객님과 함께 이삿짐의 배치 상태와 파손 여부를 최종적으로 확인합니다. 이사 과정에서 발생할 수 있는 파손이나 분실에 대비하여 저희 창원이사짐센터는 모든 이사 업체가 적재물 배상 책임 보험에 가입되어 있습니다. 만약 파손이나 분실이 발생했을 경우, 즉시 현장에서 팀장에게 알리고 증거(사진, 동영상 등)를 남겨야 합니다. 이사화물 표준약관에 따라 적절한 보상을 받으실 수 있습니다. <a href="https://www.ftc.go.kr/policy/policy_02.jsp?type=policy&pageid=255" target="_blank" rel="noopener noreferrer" class="external-link">공정거래위원회 이사화물 표준약관 확인하기</a></p>
+        </section>
+
+        <section id="review">
+            <h2>창원이사짐센터 고객 후기 및 만족도 분석</h2>
+            <p>창원이사짐센터는 고객님의 실제 후기를 바탕으로 서비스를 개선하고 있습니다. 저희는 고객 만족도 향상을 위해 이사 완료 후 설문 조사를 진행하며, 이 데이터를 기반으로 **창원 포장이사 잘하는 곳**이라는 평가를 유지하고 있습니다. 아래는 창원 지역 고객들의 실제 이사 후기 요약입니다.</p>
+
+            <div style="background-color: #f7f9fc; padding: 1.5rem; border-radius: 10px; border: 1px dashed #e0e0e0; margin-bottom: 1.5rem;">
+                <h4>김OO 고객님 (창원 성산구 → 진해구 이사)</h4>
+                <p>"성산구에서 진해구로 이사했습니다. 거리가 꽤 되어서 걱정했는데, 창원이사짐센터 팀원들이 숙련된 솜씨로 빠르게 짐을 옮겨주셨습니다. 특히 꼼꼼한 포장 덕분에 파손된 물건 없이 무사히 이사를 마쳤습니다. **창원 이사 업체 추천**합니다."</p>
+            </div>
+            <div style="background-color: #f7f9fc; padding: 1.5rem; border-radius: 10px; border: 1px dashed #e0e0e0; margin-bottom: 1.5rem;">
+                <h4>박OO 고객님 (마산회원구 원룸 이사)</h4>
+                <p>"혼자 사는 원룸이라 짐이 많지 않아 **반포장이사**를 선택했습니다. 잔짐은 제가 포장하고 큰 가구만 맡겼는데, 비용도 저렴하고 서비스도 만족스러웠습니다. **마산 이사짐센터** 중에서는 여기가 제일 친절한 것 같아요. 다음에도 이용할 생각입니다."</p>
+            </div>
+            <div style="background-color: #f7f9fc; padding: 1.5rem; border-radius: 10px; border: 1px dashed #e0e0e0;">
+                <h4>이OO 고객님 (의창구 아파트 이사)</h4>
+                <p>"**손없는날**에 이사를 진행하느라 비용이 걱정되었는데, 여러 업체 비교를 통해 합리적인 견적을 받았습니다. 방문 견적 때 꼼꼼하게 짐을 체크해주셔서 추가 비용도 없었습니다. 주방 정리까지 완벽하게 해주셔서 정말 편리했습니다."</p>
+            </div>
+            
+            <h3>고객 만족도 향상을 위한 창원이사짐센터의 약속</h3>
+            <p>저희는 고객 만족도 향상을 위해 다음 세 가지 약속을 드립니다:</p>
+            <ol>
+                <li><strong>투명한 견적:</strong> 이사 당일 추가 비용 발생을 최소화하기 위해 방문 견적을 기반으로 상세한 견적서를 제공합니다.</li>
+                <li><strong>친절한 서비스:</strong> 이사 전문가들이 고객님의 입장에서 친절하고 세심하게 서비스를 제공합니다.</li>
+                <li><strong>책임 보상:</strong> 이사 과정 중 발생한 파손 및 분실에 대해 규정에 따라 신속하고 책임감 있게 보상합니다.</li>
+            </ol>
+            <a href="https://www.kca.go.kr/home/main.do" target="_blank" rel="noopener noreferrer" class="external-link">한국소비자원 이사 관련 피해 예방 정보 확인하기</a>
+        </section>
+
+        <section id="faq">
+            <h2>자주 묻는 질문 (FAQ)</h2>
+            <p>창원 이사 고객님들이 자주 문의하는 내용들을 정리했습니다. 궁금한 점이 있다면 언제든지 문의해주세요.</p>
+            <dl>
+                <dt tabindex="0" aria-expanded="false" class="faq-toggle"><strong>Q. 창원이사짐센터를 통해 견적을 받으려면 비용이 드나요?</strong></dt>
+                <dd>A. 아니요, 창원이사짐센터의 모든 견적 서비스는 무료로 제공됩니다. 온라인 견적 신청 후 전문 매니저의 **무료 방문 견적**까지 모두 무료로 받아보실 수 있습니다. 견적을 받은 후 계약을 하지 않으셔도 일체의 비용이 발생하지 않습니다.</dd>
+
+                <dt tabindex="0" aria-expanded="false" class="faq-toggle"><strong>Q. 이사 중 짐이 파손되거나 분실되면 어떻게 보상받을 수 있나요?</strong></dt>
+                <dd>A. 저희와 제휴된 **창원 이사 업체**는 모두 적재물 배상 책임 보험에 가입되어 있습니다. 이사 중 파손이나 분실이 발생하면 즉시 이사 팀장에게 알리고, 사진이나 동영상 등 증거 자료를 확보하는 것이 중요합니다. 이사 후 발견 시에는 7일 이내에 해당 업체에 통보해야 합니다. 공정거래위원회에서 고시하는 이사화물 표준약관에 따라 적절한 보상을 받으실 수 있습니다.</dd>
+
+                <dt tabindex="0" aria-expanded="false" class="faq-toggle"><strong>Q. 이사 당일 추가 비용이 발생할 수 있나요?</strong></dt>
+                <dd>A. 원칙적으로 방문 견적 시 작성된 계약서에 명시된 금액 외에는 **추가 비용**이 발생하지 않습니다. 하지만 견적 당시에 고지하지 않은 짐 증가, 사다리차 진입 불가, 이사 당일 고객의 추가 요청(가구 조립 등) 등의 특수한 상황이 발생할 경우 추가 비용이 청구될 수 있습니다. 이러한 상황을 방지하기 위해 방문 견적 시 모든 상황을 상세히 설명하는 것이 중요합니다.</dd>
+
+                <dt tabindex="0" aria-expanded="false" class="faq-toggle"><strong>Q. 이사 날짜가 변경되면 어떻게 되나요?</strong></dt>
+                <dd>A. 이사 날짜 변경은 가능한 한 빨리 업체에 통보해야 합니다. 계약서에 명시된 규정에 따라 위약금이 발생할 수 있으며, 특히 **손없는날** 등 이사 성수기에 임박하여 날짜를 변경할 경우 위약금이 높게 책정될 수 있습니다. 계약서 내용을 반드시 확인해 주세요.</dd>
+
+                <dt tabindex="0" aria-expanded="false" class="faq-toggle"><strong>Q. 창원 이사 시 필요한 행정 절차는 무엇인가요?</strong></dt>
+                <dd>A. 이사 후에는 전입신고(14일 이내), 확정일자 신고, 자동차 등록지 변경, 우편물 주소 이전 서비스 신청 등을 진행해야 합니다. 정부24 웹사이트를 통해 온라인으로 편리하게 전입신고 및 주소 변경을 할 수 있습니다. <a href="https://www.gov.kr/main?a=moveto_main" target="_blank" rel="noopener noreferrer" class="external-link">정부24 전입신고 서비스</a></dd>
+            </dl>
+        </section>
+
+        <section id="contact">
+            <h2>창원이사 견적 문의 및 예약 (무료)</h2>
+            <p><strong>창원이사짐센터</strong>를 통해 합리적인 이사 비용과 만족스러운 서비스를 경험하세요. 아래 양식을 작성해 주시면 전문 매니저가 신속하게 연락드리겠습니다. 창원 지역의 **포장이사** 견적 비교는 저희에게 맡기시고, 고객님은 편안하게 이사 준비를 하세요.</p>
+
+            <div class="quote-form">
+                <form action="#" method="post">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">이름</label>
+                            <input type="text" id="name" name="name" placeholder="고객님의 성함을 입력해주세요" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">연락처</label>
+                            <input type="tel" id="phone" name="phone" placeholder="010-0000-0000 형식으로 입력" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="move-date">이사 희망 날짜</label>
+                            <input type="date" id="move-date" name="move-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="move-type">이사 종류</label>
+                            <select id="move-type" name="move-type" required>
+                                <option value="">선택하세요</option>
+                                <option value="포장이사">포장이사</option>
+                                <option value="반포장이사">반포장이사</option>
+                                <option value="일반이사">일반이사</option>
+                                <option value="사무실이사">사무실이사</option>
+                                <option value="보관이사">보관이사</option>
+                                <option value="원룸이사">원룸이사</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-address">출발지 주소 (창원시 구/동)</label>
+                            <input type="text" id="start-address" name="start-address" placeholder="예: 창원시 성산구 상남동" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-address">도착지 주소 (창원시 외 지역 가능)</label>
+                            <input type="text" id="end-address" name="end-address" placeholder="예: 창원시 의창구 팔용동 또는 김해시 장유동" required>
+                        </div>
+                    </div>
+                    <label for="message">추가 요청 사항</label>
+                    <textarea id="message" name="message" rows="4" placeholder="짐의 양(평수), 특수 물품(에어컨, 피아노 등), 이사 환경(고층 아파트 여부) 등을 상세히 알려주세요."></textarea>
+                    <button type="submit">무료 견적 신청하기</button>
+                </form>
+            </div>
+
+            <p style="text-align: center;">전화 상담이 필요하시면 아래 연락처로 문의해주세요.</p>
+            <div style="text-align: center; font-size: 1.5rem; color: #1a4d7d; font-weight: 700;">전화: 050-1234-5678</div>
+            <p style="text-align: center; font-size: 0.9rem; margin-top: 0.5rem;">운영 시간: 평일 09:00 ~ 18:00 (주말 및 공휴일 휴무)</p>
+        </section>
     </main>
-  </body>
-</html>
+
+    <footer>
+        <p>Copyright &copy; 2026 창원이사짐센터. All Rights Reserved.</p>
+        <p class="info-text">본 웹사이트는 창원 지역의 우수 이사 업체들을 연결해 드리는 견적 비교 플랫폼이며, 직접 이사 서비스를 제공하지 않습니다. 모든 서비스 계약 및 책임은 해당 제휴 업체에 있습니다.</p>
+        <a href="https://www.law.go.kr/lsInfoP.do?lsiSeq=230635&efYd=20200805" target="_blank" rel="noopener noreferrer" class="external-link">법제처 이사화물 표준약관 확인하기</a>
+        <a href="https://www.kobiz.or.kr/" target="_blank" rel="noopener noreferrer" class="external-link">중소벤처기업부 공식 웹사이트 (사업자 정보 확인 참고)</a>
+        <a href="https://www.koti.re.kr/" target="_blank" rel="noopener noreferrer" class="external-link">한국교통연구원 (교통 관련 정보)</a>
+    </footer>
+
+    <script>
+        // FAQ 아코디언 기능 (접기/펼치기)
+        document.querySelectorAll('dl dt.faq-toggle').forEach((dt) => {
+            dt.addEventListener('click', () => {
+                const expanded = dt.getAttribute('aria-expanded') === 'true' || false;
+                dt.setAttribute('aria-expanded', !expanded);
+                dt.classList.toggle('active');
+            });
+            dt.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    dt.click();
+                }
+            });
+        });
+    </script>
+
+  
